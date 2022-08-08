@@ -1,0 +1,48 @@
+@model IEnumerable<ISMTS2WebApp.Models.Department>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                S. No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                    <a href="Delete/@item.Id" onclick="return confirm('Are you sure you want to delete?');">Delete</a>
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
