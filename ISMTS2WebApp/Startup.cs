@@ -1,5 +1,6 @@
 using ISMTS2WebApp.Data;
 using ISMTS2WebApp.Interface;
+using ISMTS2WebApp.Models;
 using ISMTS2WebApp.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,19 +25,21 @@ namespace ISMTS2WebApp
 
         public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddTransient<IEmployeeService, EmployeeService>();
-      services.AddTransient<IDepartmentService, DepartmentService>();
-      services.AddScoped<AppDbContext>();
-      services.AddDbContext<AppDbContext>(options =>
-                           options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-      services.AddControllersWithViews();
-    }
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IDepartmentService, DepartmentService>();
+            services.AddScoped<AppDbContext>();
+            services.AddDbContext<AppDbContext>(options =>
+                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<AppDbContext>();
+            services.AddControllersWithViews();
+        }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -54,14 +57,13 @@ namespace ISMTS2WebApp
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            
         }
     }
 }
