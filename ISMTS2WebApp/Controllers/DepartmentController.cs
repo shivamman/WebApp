@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ISMTS2WebApp.Controllers
 {
-    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentService _departmentService;
@@ -18,6 +17,8 @@ namespace ISMTS2WebApp.Controllers
             var data = _departmentService.GetAllDepartment();
             return View(data);
         }
+
+        [Authorize]
         public IActionResult Create()
         {
             //ViewBag.Departments = _departmentService.GetAllDepartment();

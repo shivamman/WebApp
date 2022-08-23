@@ -33,6 +33,7 @@ namespace ISMTS2WebApp
             services.AddScoped<AppDbContext>();
             services.AddDbContext<AppDbContext>(options =>
                                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<AppDbContext>();
             services.AddControllersWithViews();
@@ -56,13 +57,14 @@ namespace ISMTS2WebApp
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
